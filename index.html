@@ -3,236 +3,483 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Missign</title>
+  <title>Missign — Find them faster</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background: #f5f5f5; color: #111; }
 
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #fdf9f6;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
     header {
-      background: #111;
-      color: white;
+      background: #1a1a2e;
       padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    header .logo {
       font-size: 1.8rem;
-      font-weight: bold;
+      font-weight: 900;
+      color: white;
       letter-spacing: 4px;
     }
 
-    .container {
-      max-width: 700px;
-      margin: 40px auto;
-      background: white;
-      border-radius: 16px;
-      padding: 40px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    header .tagline {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.4);
+      font-weight: 600;
+      letter-spacing: 1px;
     }
 
-    h2 { font-size: 1.4rem; margin-bottom: 24px; color: #111; }
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d2d5e 100%);
+      padding: 60px 40px 70px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-    .type-selector {
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(255,71,87,0.08);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 250px; height: 250px;
+      border-radius: 50%;
+      background: rgba(255,71,87,0.06);
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: white;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 span {
+      color: #ff4757;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.6);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-steps {
       display: flex;
-      gap: 12px;
-      margin-bottom: 28px;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 40px;
+      position: relative;
+      z-index: 1;
+      flex-wrap: wrap;
     }
 
-    .type-btn {
-      flex: 1;
-      padding: 16px;
-      border: 2px solid #ddd;
-      border-radius: 12px;
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ff4757;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* FORM CONTAINER */
+    .container {
+      max-width: 680px;
+      margin: -30px auto 60px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .form-card {
       background: white;
-      font-size: 1rem;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
+      border-radius: 28px;
+      padding: 44px;
+      box-shadow: 0 20px 60px rgba(26,26,46,0.12);
     }
 
-    .type-btn:hover { border-color: #111; }
-    .type-btn.selected { border-color: #111; background: #111; color: white; }
-
-    .type-btn .emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
-
-    .form-group { margin-bottom: 20px; }
-    label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 0.9rem; }
-
-    input, textarea {
-      width: 100%;
-      padding: 12px 16px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-      outline: none;
-      transition: border 0.2s;
+    /* SECTION HEADERS */
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 16px;
+      margin-top: 36px;
     }
 
-    input:focus, textarea:focus { border-color: #111; }
-    textarea { height: 100px; resize: vertical; }
+    .section-title:first-child { margin-top: 0; }
 
-    .photo-upload {
-      border: 2px dashed #ddd;
-      border-radius: 8px;
-      padding: 30px;
-      text-align: center;
-      cursor: pointer;
-      transition: border 0.2s;
-    }
-
-    .photo-upload:hover { border-color: #111; }
-    .photo-upload input { display: none; }
-
-    #map {
-      height: 350px;
-      border-radius: 12px;
-      margin-top: 8px;
-      border: 2px solid #ddd;
-    }
-
-    .radius-control {
-      margin-top: 16px;
+    /* TYPE SELECTOR */
+    .type-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 10px;
       margin-bottom: 8px;
     }
 
-    .radius-control input[type=range] {
+    .type-btn {
+      padding: 18px 8px;
+      border: 2.5px solid #eee;
+      border-radius: 16px;
+      background: white;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .type-btn:hover { border-color: #1a1a2e; transform: translateY(-2px); }
+    .type-btn.selected { border-color: #ff4757; background: #fff5f6; }
+
+    .type-btn .emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
+    .type-btn .label { font-size: 0.85rem; font-weight: 800; color: #1a1a2e; }
+
+    /* INPUTS */
+    .form-group { margin-bottom: 16px; }
+
+    label {
+      display: block;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+
+    label .hint {
+      font-weight: 600;
+      color: #aaa;
+      font-size: 0.8rem;
+      margin-left: 6px;
+    }
+
+    input, textarea {
       width: 100%;
-      border: none;
-      padding: 0;
-    }
-
-    .screen-count {
-      background: #f0f0f0;
-      border-radius: 8px;
-      padding: 16px;
-      margin-top: 16px;
-      text-align: center;
+      padding: 14px 18px;
+      border: 2.5px solid #eee;
+      border-radius: 14px;
       font-size: 1rem;
+      font-family: 'Nunito', sans-serif;
+      outline: none;
+      transition: border 0.2s;
+      background: #fafafa;
+      color: #1a1a2e;
     }
 
-    .screen-count strong { font-size: 1.4rem; }
+    input:focus, textarea:focus {
+      border-color: #1a1a2e;
+      background: white;
+    }
 
-    .price-box {
-      background: #111;
-      color: white;
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 20px;
+    textarea { height: 110px; resize: vertical; }
+
+    /* CHAR COUNTER */
+    .char-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+
+    .char-count {
+      font-size: 0.75rem;
+      color: #ccc;
+      font-weight: 700;
+    }
+
+    .char-count.warn { color: #ff4757; }
+
+    /* PHOTO UPLOAD */
+    .photo-upload {
+      border: 2.5px dashed #ddd;
+      border-radius: 16px;
+      padding: 28px;
       text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fafafa;
     }
 
-    .price-box .price { font-size: 2.5rem; font-weight: bold; }
-    .price-box .price-sub { color: #aaa; font-size: 0.9rem; margin-top: 4px; }
+    .photo-upload:hover { border-color: #1a1a2e; background: white; }
+    .photo-upload input { display: none; }
+    .photo-upload .icon { font-size: 2rem; margin-bottom: 8px; }
+    .photo-upload .text { font-size: 0.95rem; font-weight: 700; color: #888; }
+    .photo-upload.has-photo { border-color: #2ed573; background: #f0fff4; }
+    .photo-upload.has-photo .text { color: #2ed573; }
+
+    /* MAP */
+    #map {
+      height: 320px;
+      border-radius: 16px;
+      border: 2.5px solid #eee;
+    }
+
+    .radius-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .radius-row label { margin: 0; white-space: nowrap; font-size: 0.9rem; }
+
+    input[type=range] {
+      flex: 1;
+      padding: 0;
+      border: none;
+      background: transparent;
+      accent-color: #ff4757;
+    }
+
+    .radius-val {
+      font-weight: 900;
+      color: #ff4757;
+      font-size: 1rem;
+      min-width: 50px;
+      text-align: right;
+    }
+
+    /* SCREEN COUNT */
+    .screen-count-box {
+      background: #f7f3ee;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .screen-count-box .icon { font-size: 1.5rem; }
+
+    .screen-count-box .text { font-size: 0.95rem; color: #666; font-weight: 600; }
+    .screen-count-box .text strong { color: #1a1a2e; font-size: 1.1rem; }
+
+    /* PRICE BOX */
+    .price-box {
+      background: #1a1a2e;
+      border-radius: 20px;
+      padding: 28px;
+      margin-top: 20px;
+    }
+
+    .price-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .price-label { color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; }
+    .price-amount { font-size: 3rem; font-weight: 900; color: white; }
+    .price-sub { color: rgba(255,255,255,0.35); font-size: 0.8rem; font-weight: 600; margin-top: 2px; text-align: right; }
 
     .duration-selector {
       display: flex;
       gap: 10px;
-      margin-top: 16px;
     }
 
     .duration-btn {
       flex: 1;
-      padding: 10px;
-      border: 2px solid #444;
-      border-radius: 8px;
+      padding: 12px;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
       background: transparent;
-      color: white;
+      color: rgba(255,255,255,0.5);
       cursor: pointer;
       font-size: 0.9rem;
+      font-weight: 800;
+      font-family: 'Nunito', sans-serif;
       transition: all 0.2s;
     }
 
-    .duration-btn.selected { background: white; color: #111; border-color: white; }
+    .duration-btn:hover { border-color: rgba(255,255,255,0.4); color: white; }
+    .duration-btn.selected { background: #ff4757; border-color: #ff4757; color: white; }
 
+    /* SUBMIT */
     .submit-btn {
       width: 100%;
-      padding: 18px;
-      background: #ff3b3b;
+      padding: 20px;
+      background: #ff4757;
       color: white;
       border: none;
-      border-radius: 12px;
-      font-size: 1.2rem;
-      font-weight: bold;
+      border-radius: 16px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      font-family: 'Nunito', sans-serif;
       cursor: pointer;
-      margin-top: 24px;
-      transition: background 0.2s;
+      margin-top: 20px;
+      transition: all 0.2s;
+      letter-spacing: 1px;
     }
 
-    .submit-btn:hover { background: #e02020; }
-    .submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+    .submit-btn:hover { background: #e03040; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,71,87,0.35); }
+    .submit-btn:disabled { background: #ddd; color: #aaa; transform: none; box-shadow: none; cursor: not-allowed; }
+
+    .reassurance {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: #aaa;
+      font-weight: 600;
+    }
+
+    .reassurance span { color: #2ed573; font-weight: 800; }
   </style>
 </head>
 <body>
 
-<header>MISSIGN</header>
+<header>
+  <div>
+    <div class="logo">MISSIGN</div>
+    <div class="tagline">Digital missing posters, instantly</div>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Get the word out<br><span>in seconds.</span></h1>
+  <p>When every minute counts, Missign puts your missing poster on screens near where they were last seen — instantly.</p>
+  <div class="hero-steps">
+    <div class="step"><div class="step-num">1</div> Fill in the details</div>
+    <div class="step"><div class="step-num">2</div> Choose your area</div>
+    <div class="step"><div class="step-num">3</div> Go live instantly</div>
+  </div>
+</div>
 
 <div class="container">
-  <h2>Report a missing person or pet</h2>
+  <div class="form-card">
 
-  <!-- Type selector -->
-  <div class="type-selector">
-    <button class="type-btn" data-type="human" onclick="selectType('human')">
-      <span class="emoji">👤</span> Person
-    </button>
-    <button class="type-btn" data-type="dog" onclick="selectType('dog')">
-      <span class="emoji">🐶</span> Dog
-    </button>
-    <button class="type-btn" data-type="cat" onclick="selectType('cat')">
-      <span class="emoji">🐱</span> Cat
-    </button>
-    <button class="type-btn" data-type="other" onclick="selectType('other')">
-      <span class="emoji">❓</span> Other
-    </button>
-  </div>
-
-  <!-- Details -->
-  <div class="form-group">
-    <label>Name</label>
-    <input type="text" id="name" placeholder="What is their name?" />
-  </div>
-
-  <div class="form-group">
-    <label>Description</label>
-    <textarea id="description" placeholder="Age, appearance, what they were wearing / breed, colour, size..."></textarea>
-  </div>
-
-  <div class="form-group">
-    <label>Your contact number</label>
-    <input type="text" id="contact" placeholder="Phone number" />
-  </div>
-
-  <div class="form-group">
-    <label>Photo (optional)</label>
-    <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
-      <input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(event)" />
-      <span id="photoLabel">📷 Tap to upload a photo</span>
+    <div class="section-title">Who is missing?</div>
+    <div class="type-selector">
+      <button class="type-btn" data-type="human" onclick="selectType('human')">
+        <span class="emoji">👤</span>
+        <span class="label">Person</span>
+      </button>
+      <button class="type-btn" data-type="dog" onclick="selectType('dog')">
+        <span class="emoji">🐶</span>
+        <span class="label">Dog</span>
+      </button>
+      <button class="type-btn" data-type="cat" onclick="selectType('cat')">
+        <span class="emoji">🐱</span>
+        <span class="label">Cat</span>
+      </button>
+      <button class="type-btn" data-type="other" onclick="selectType('other')">
+        <span class="emoji">❓</span>
+        <span class="label">Other</span>
+      </button>
     </div>
-  </div>
 
-  <!-- Map -->
-  <div class="form-group">
-    <label>Where were they last seen? Drop a pin and set your radius.</label>
-    <div id="map"></div>
-    <div class="radius-control">
-      <label>Radius: <span id="radiusLabel">2</span> km</label>
-      <input type="range" min="0.5" max="20" step="0.5" value="2" oninput="updateRadius(this.value)" />
+    <div class="section-title">Their details</div>
+
+    <div class="form-group">
+      <label>Name <span class="hint">First name or full name</span></label>
+      <input type="text" id="name" placeholder="e.g. Buddy, Max, Sarah..." maxlength="30" oninput="updateChar('name', 30)"/>
+      <div class="char-row"><span class="char-count" id="name-count">30 left</span></div>
     </div>
-  </div>
 
-  <!-- Screen count + pricing -->
-  <div class="screen-count">
-    <strong id="screenCount">0</strong> screens in your area
-  </div>
-
-  <div class="price-box">
-    <div>Total price</div>
-    <div class="price" id="totalPrice">€0</div>
-    <div class="price-sub">€2 per screen per day</div>
-    <div class="duration-selector">
-      <button class="duration-btn selected" onclick="selectDuration(1)">1 day</button>
-      <button class="duration-btn" onclick="selectDuration(3)">3 days</button>
-      <button class="duration-btn" onclick="selectDuration(7)">7 days</button>
+    <div class="form-group">
+      <label>Description <span class="hint">What do they look like?</span></label>
+      <textarea id="description" placeholder="Breed, colour, age, what they were wearing, any distinguishing features..." maxlength="160" oninput="updateChar('description', 160)"></textarea>
+      <div class="char-row"><span class="char-count" id="description-count">160 left</span></div>
     </div>
-  </div>
 
-  <button class="submit-btn" id="submitBtn" onclick="submitAd()">Continue to payment →</button>
+    <div class="form-group">
+      <label>Your phone number <span class="hint">Shown on the display</span></label>
+      <input type="tel" id="contact" placeholder="e.g. 06 1234 5678" maxlength="20" oninput="updateChar('contact', 20)"/>
+      <div class="char-row"><span class="char-count" id="contact-count">20 left</span></div>
+    </div>
+
+    <div class="form-group">
+      <label>Photo <span class="hint">Optional but really helps</span></label>
+      <div class="photo-upload" id="photoUpload" onclick="document.getElementById('photoInput').click()">
+        <input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(event)" />
+        <div class="icon">📷</div>
+        <div class="text" id="photoLabel">Tap to add a photo</div>
+      </div>
+    </div>
+
+    <div class="section-title">Where were they last seen?</div>
+
+    <div class="form-group">
+      <div id="map"></div>
+      <div class="radius-row">
+        <label>Search radius</label>
+        <input type="range" min="0.5" max="20" step="0.5" value="2" oninput="updateRadius(this.value)" onchange="updateRadius(this.value)" />
+        <span class="radius-val"><span id="radiusLabel">2</span> km</span>
+      </div>
+    </div>
+
+    <div class="screen-count-box">
+      <span class="icon">📺</span>
+      <span class="text">Your ad will show on <strong id="screenCount">0</strong> screens in this area</span>
+    </div>
+
+    <div class="section-title">How long?</div>
+
+    <div class="price-box">
+      <div class="price-top">
+        <div>
+          <div class="price-label">TOTAL PRICE</div>
+          <div class="price-amount" id="totalPrice">€0</div>
+        </div>
+        <div class="price-sub">€2 per screen<br>per day</div>
+      </div>
+      <div class="duration-selector">
+        <button class="duration-btn selected" onclick="selectDuration(1, this)">1 day</button>
+        <button class="duration-btn" onclick="selectDuration(3, this)">3 days</button>
+        <button class="duration-btn" onclick="selectDuration(7, this)">7 days</button>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="submitAd()">
+      🔍 Put my poster live now
+    </button>
+
+    <div class="reassurance">
+      <span>✓ Goes live instantly</span> &nbsp;·&nbsp; No account needed &nbsp;·&nbsp; Cancel anytime
+    </div>
+
+  </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -250,30 +497,27 @@
   let allScreens = [];
   let photoFile = null;
 
-  // Init map centered on your location
   const map = L.map('map').setView([52.3676, 4.9041], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-  // Load screens from Supabase and show on map
   async function loadScreens() {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/screens?active=eq.true`, {
-      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    const res = await fetch(SUPABASE_URL + '/rest/v1/screens?active=eq.true', {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
     });
     allScreens = await res.json();
-    allScreens.forEach(screen => {
+    allScreens.forEach(function(screen) {
       L.marker([screen.lat, screen.lng], {
         icon: L.divIcon({ className: '', html: '📺', iconSize: [24, 24] })
       }).addTo(map).bindPopup(screen.name);
     });
   }
 
-  // Click on map to drop pin
   map.on('click', function(e) {
-    const { lat, lng } = e.latlng;
+    var lat = e.latlng.lat, lng = e.latlng.lng;
     if (marker) map.removeLayer(marker);
     if (circle) map.removeLayer(circle);
     marker = L.marker([lat, lng]).addTo(map);
-    circle = L.circle([lat, lng], { radius: radiusKm * 1000, color: '#ff3b3b', fillOpacity: 0.1 }).addTo(map);
+    circle = L.circle([lat, lng], { radius: radiusKm * 1000, color: '#ff4757', fillOpacity: 0.1 }).addTo(map);
     updateScreenCount(lat, lng);
   });
 
@@ -281,110 +525,125 @@
     radiusKm = parseFloat(val);
     document.getElementById('radiusLabel').textContent = val;
     if (marker) {
-      const { lat, lng } = marker.getLatLng();
+      var ll = marker.getLatLng();
       if (circle) map.removeLayer(circle);
-      circle = L.circle([lat, lng], { radius: radiusKm * 1000, color: '#ff3b3b', fillOpacity: 0.1 }).addTo(map);
-      updateScreenCount(lat, lng);
+      circle = L.circle([ll.lat, ll.lng], { radius: radiusKm * 1000, color: '#ff4757', fillOpacity: 0.1 }).addTo(map);
+      updateScreenCount(ll.lat, ll.lng);
     }
   }
 
   function updateScreenCount(lat, lng) {
-    screensInRadius = allScreens.filter(screen => {
-      const d = getDistanceKm(lat, lng, screen.lat, screen.lng);
-      return d <= radiusKm;
+    screensInRadius = allScreens.filter(function(s) {
+      return getDistanceKm(lat, lng, s.lat, s.lng) <= radiusKm;
     });
     document.getElementById('screenCount').textContent = screensInRadius.length;
     updatePrice();
   }
 
   function getDistanceKm(lat1, lng1, lat2, lng2) {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLng/2) * Math.sin(dLng/2);
+    var R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
+    var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+            Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
 
   function updatePrice() {
-    const total = screensInRadius.length * PRICE_PER_SCREEN_PER_DAY * selectedDuration;
-    document.getElementById('totalPrice').textContent = `€${total}`;
+    document.getElementById('totalPrice').textContent = '€' + (screensInRadius.length * PRICE_PER_SCREEN_PER_DAY * selectedDuration);
   }
 
   function selectType(type) {
     selectedType = type;
-    document.querySelectorAll('.type-btn').forEach(btn => {
+    document.querySelectorAll('.type-btn').forEach(function(btn) {
       btn.classList.toggle('selected', btn.dataset.type === type);
     });
   }
 
-  function selectDuration(days) {
+  function selectDuration(days, btn) {
     selectedDuration = days;
-    document.querySelectorAll('.duration-btn').forEach(btn => btn.classList.remove('selected'));
-    event.target.classList.add('selected');
+    document.querySelectorAll('.duration-btn').forEach(function(b) { b.classList.remove('selected'); });
+    btn.classList.add('selected');
     updatePrice();
+  }
+
+  function updateChar(id, max) {
+    var val = document.getElementById(id).value.length;
+    var el = document.getElementById(id + '-count');
+    var left = max - val;
+    el.textContent = left + ' left';
+    el.classList.toggle('warn', left <= 10);
   }
 
   function handlePhoto(event) {
     photoFile = event.target.files[0];
-    document.getElementById('photoLabel').textContent = `✅ ${photoFile.name}`;
+    document.getElementById('photoLabel').textContent = '✅ ' + photoFile.name;
+    document.getElementById('photoUpload').classList.add('has-photo');
   }
 
-async function uploadPhoto() {
+  async function uploadPhoto() {
     if (!photoFile) return null;
-    const filename = `${Date.now()}_${photoFile.name}`;
-    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/photos/${filename}`, {
+    var filename = Date.now() + '_' + photoFile.name;
+    var res = await fetch(SUPABASE_URL + '/storage/v1/object/photos/' + filename, {
       method: 'POST',
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': photoFile.type
-      },
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': photoFile.type },
       body: photoFile
     });
     if (!res.ok) return null;
-    return `${SUPABASE_URL}/storage/v1/object/public/photos/${filename}`;
+    return SUPABASE_URL + '/storage/v1/object/public/photos/' + filename;
   }
 
   async function submitAd() {
-    if (!selectedType) return alert('Please select a type');
-    if (!document.getElementById('name').value) return alert('Please enter a name');
-    if (!document.getElementById('contact').value) return alert('Please enter a contact number');
-    if (!marker) return alert('Please drop a pin on the map');
-    if (screensInRadius.length === 0) return alert('No screens in your selected area');
+    try {
+      if (!selectedType) return alert('Please select who is missing');
+      if (!document.getElementById('name').value) return alert('Please enter a name');
+      if (!document.getElementById('contact').value) return alert('Please enter your phone number');
+      if (!marker) return alert('Please drop a pin where they were last seen');
+      if (screensInRadius.length === 0) return alert('No screens found in your area — try a larger radius');
 
-    alert('Payment coming soon! For now your ad will go live immediately.');
+      var btn = document.getElementById('submitBtn');
+      btn.textContent = 'Going live...';
+      btn.disabled = true;
 
-    const { lat, lng } = marker.getLatLng();
+      var ll = marker.getLatLng();
+      var image_url = await uploadPhoto();
 
-    const image_url = await uploadPhoto();
+      var body = {
+        name: document.getElementById('name').value,
+        type: selectedType,
+        description: document.getElementById('description').value,
+        contact: document.getElementById('contact').value,
+        image_url: image_url,
+        status: 'active',
+        lat: ll.lat,
+        lng: ll.lng,
+        radius: radiusKm,
+        duration_days: selectedDuration
+      };
 
-    const body = {
-      name: document.getElementById('name').value,
-      type: selectedType,
-      description: document.getElementById('description').value,
-      contact: document.getElementById('contact').value,
-      image_url,
-      status: 'active',
-      lat, lng,
-      radius: radiusKm,
-      duration_days: selectedDuration
-    };
+      var insertRes = await fetch(SUPABASE_URL + '/rest/v1/ads', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(body)
+      });
 
-const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/ads`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify(body)
-    });
-
-    const insertText = await insertRes.text();
-    alert('Status: ' + insertRes.status + ' — ' + insertText);
+      if (insertRes.ok || insertRes.status === 201) {
+        btn.textContent = '✅ Your poster is live!';
+        btn.style.background = '#2ed573';
+      } else {
+        var t = await insertRes.text();
+        btn.textContent = '🔍 Put my poster live now';
+        btn.disabled = false;
+        alert('Something went wrong: ' + t);
+      }
+    } catch(e) {
+      alert('Error: ' + e.message);
+      document.getElementById('submitBtn').textContent = '🔍 Put my poster live now';
+      document.getElementById('submitBtn').disabled = false;
+    }
   }
 
   loadScreens();
