@@ -104,15 +104,38 @@
 
   let currentIndex = 0;
   let ads = [];
-
+  
+  function getDistanceKm(lat1, lng1, lat2, lng2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng/2) * Math.sin(dLng/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
   async function fetchAds() {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/ads?status=eq.active&order=created_at.desc`, {
+  const screenRes = await fetch(`${SUPABASE_URL}/rest/v1/screens?name=eq.Screen%201`, {
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
       }
     });
-    ads = await res.json();
+    const screens = await screenRes.json();
+    const screen = screens[0];
+
+    const allAdsRes = await fetch(`${SUPABASE_URL}/rest/v1/ads?status=eq.active&order=created_at.desc`, {
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+const allAds = await allAdsRes.json();
+    ads = allAds.filter(ad => {
+      if (!ad.lat || !ad.lng) return true;
+      const d = getDistanceKm(screen.lat, screen.lng, ad.lat, ad.lng);
+      return d <= ad.radius;
+    });
     console.log('ads fetched:', ads);
     document.title = JSON.stringify(ads);
     if (ads.length === 0) showNoAds();
