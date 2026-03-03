@@ -113,6 +113,8 @@
       }
     });
     ads = await res.json();
+    console.log('ads fetched:', ads);
+    document.title = JSON.stringify(ads);
     if (ads.length === 0) showNoAds();
     else showAd(currentIndex % ads.length);
   }
