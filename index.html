@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Missign — Find them faster</title>
+  <title>Missign — Vind ze sneller</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
@@ -16,7 +16,6 @@
       min-height: 100vh;
     }
 
-    /* HEADER */
     header {
       background: #1a1a2e;
       padding: 20px 40px;
@@ -24,30 +23,16 @@
       align-items: center;
       gap: 14px;
     }
+    header .logo { font-size: 1.8rem; font-weight: 900; color: white; letter-spacing: 4px; }
+    header .tagline { font-size: 0.9rem; color: rgba(255,255,255,0.4); font-weight: 600; }
 
-    header .logo {
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: white;
-      letter-spacing: 4px;
-    }
-
-    header .tagline {
-      font-size: 0.9rem;
-      color: rgba(255,255,255,0.4);
-      font-weight: 600;
-      letter-spacing: 1px;
-    }
-
-    /* HERO */
     .hero {
       background: linear-gradient(135deg, #1a1a2e 0%, #2d2d5e 100%);
-      padding: 60px 40px 70px;
+      padding: 60px 40px 80px;
       text-align: center;
       position: relative;
       overflow: hidden;
     }
-
     .hero::before {
       content: '';
       position: absolute;
@@ -56,44 +41,14 @@
       border-radius: 50%;
       background: rgba(255,71,87,0.08);
     }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; left: -40px;
-      width: 250px; height: 250px;
-      border-radius: 50%;
-      background: rgba(255,71,87,0.06);
-    }
-
-    .hero h1 {
-      font-size: 2.8rem;
-      font-weight: 900;
-      color: white;
-      line-height: 1.2;
-      margin-bottom: 16px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero h1 span {
-      color: #ff4757;
-    }
-
-    .hero p {
-      font-size: 1.15rem;
-      color: rgba(255,255,255,0.6);
-      max-width: 500px;
-      margin: 0 auto;
-      line-height: 1.7;
-      position: relative;
-      z-index: 1;
-    }
+    .hero h1 { font-size: 2.8rem; font-weight: 900; color: white; line-height: 1.2; margin-bottom: 16px; position: relative; z-index: 1; }
+    .hero h1 span { color: #ff4757; }
+    .hero p { font-size: 1.15rem; color: rgba(255,255,255,0.6); max-width: 520px; margin: 0 auto; line-height: 1.7; position: relative; z-index: 1; }
 
     .hero-steps {
       display: flex;
       justify-content: center;
-      gap: 32px;
+      gap: 0;
       margin-top: 40px;
       position: relative;
       z-index: 1;
@@ -110,8 +65,7 @@
     }
 
     .step-num {
-      width: 28px;
-      height: 28px;
+      width: 28px; height: 28px;
       border-radius: 50%;
       background: #ff4757;
       color: white;
@@ -120,43 +74,102 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
-    /* FORM CONTAINER */
+    .step-line {
+      width: 40px;
+      height: 2px;
+      background: rgba(255,255,255,0.2);
+      margin: 0 4px;
+    }
+
+    /* OUTER LAYOUT with step track */
     .container {
-      max-width: 680px;
+      max-width: 760px;
       margin: -30px auto 60px;
       padding: 0 20px;
       position: relative;
       z-index: 10;
     }
 
-    .form-card {
-      background: white;
-      border-radius: 28px;
-      padding: 44px;
-      box-shadow: 0 20px 60px rgba(26,26,46,0.12);
+    /* STEP SECTIONS */
+    .step-section {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 0;
     }
 
-    /* SECTION HEADERS */
-    .section-title {
+    /* Left track */
+    .step-track {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 44px;
+      flex-shrink: 0;
+      width: 36px;
+    }
+
+    .track-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #ff4757;
+      color: white;
+      font-size: 1rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(255,71,87,0.3);
+      position: relative;
+      z-index: 2;
+    }
+
+    .track-line {
+      width: 3px;
+      flex: 1;
+      background: linear-gradient(to bottom, #ff4757, #ffcdd2);
+      border-radius: 3px;
+      margin: 6px 0;
+      min-height: 40px;
+    }
+
+    .track-line.last { background: linear-gradient(to bottom, #ffcdd2, transparent); }
+
+    /* Right card */
+    .step-card {
+      flex: 1;
+      background: white;
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 8px 32px rgba(26,26,46,0.08);
+      margin-bottom: 16px;
+    }
+
+    .step-card-title {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #1a1a2e;
+      margin-bottom: 20px;
+    }
+
+    .section-label {
       font-size: 0.75rem;
       font-weight: 800;
       letter-spacing: 3px;
       text-transform: uppercase;
       color: #aaa;
-      margin-bottom: 16px;
-      margin-top: 36px;
+      margin-bottom: 14px;
+      margin-top: 24px;
     }
+    .section-label:first-child { margin-top: 0; }
 
-    .section-title:first-child { margin-top: 0; }
-
-    /* TYPE SELECTOR */
     .type-selector {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
       gap: 10px;
-      margin-bottom: 8px;
     }
 
     .type-btn {
@@ -169,14 +182,23 @@
       transition: all 0.2s;
       font-family: 'Nunito', sans-serif;
     }
-
     .type-btn:hover { border-color: #1a1a2e; transform: translateY(-2px); }
     .type-btn.selected { border-color: #ff4757; background: #fff5f6; }
-
     .type-btn .emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
     .type-btn .label { font-size: 0.85rem; font-weight: 800; color: #1a1a2e; }
 
-    /* INPUTS */
+    .other-field {
+      margin-top: 14px;
+      display: none;
+      animation: slideDown 0.2s ease;
+    }
+    .other-field.visible { display: block; }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .form-group { margin-bottom: 16px; }
 
     label {
@@ -187,12 +209,7 @@
       margin-bottom: 6px;
     }
 
-    label .hint {
-      font-weight: 600;
-      color: #aaa;
-      font-size: 0.8rem;
-      margin-left: 6px;
-    }
+    label .hint { font-weight: 600; color: #aaa; font-size: 0.8rem; margin-left: 6px; }
 
     input, textarea {
       width: 100%;
@@ -206,30 +223,13 @@
       background: #fafafa;
       color: #1a1a2e;
     }
-
-    input:focus, textarea:focus {
-      border-color: #1a1a2e;
-      background: white;
-    }
-
+    input:focus, textarea:focus { border-color: #1a1a2e; background: white; }
     textarea { height: 110px; resize: vertical; }
 
-    /* CHAR COUNTER */
-    .char-row {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 4px;
-    }
-
-    .char-count {
-      font-size: 0.75rem;
-      color: #ccc;
-      font-weight: 700;
-    }
-
+    .char-row { display: flex; justify-content: flex-end; margin-top: 4px; }
+    .char-count { font-size: 0.75rem; color: #ccc; font-weight: 700; }
     .char-count.warn { color: #ff4757; }
 
-    /* PHOTO UPLOAD */
     .photo-upload {
       border: 2.5px dashed #ddd;
       border-radius: 16px;
@@ -239,7 +239,6 @@
       transition: all 0.2s;
       background: #fafafa;
     }
-
     .photo-upload:hover { border-color: #1a1a2e; background: white; }
     .photo-upload input { display: none; }
     .photo-upload .icon { font-size: 2rem; margin-bottom: 8px; }
@@ -247,12 +246,7 @@
     .photo-upload.has-photo { border-color: #2ed573; background: #f0fff4; }
     .photo-upload.has-photo .text { color: #2ed573; }
 
-    /* MAP */
-    #map {
-      height: 320px;
-      border-radius: 16px;
-      border: 2.5px solid #eee;
-    }
+    #map { height: 320px; border-radius: 16px; border: 2.5px solid #eee; }
 
     .radius-row {
       display: flex;
@@ -260,26 +254,10 @@
       gap: 16px;
       margin-top: 14px;
     }
+    .radius-row label { margin: 0; white-space: nowrap; }
+    input[type=range] { flex: 1; padding: 0; border: none; background: transparent; accent-color: #ff4757; }
+    .radius-val { font-weight: 900; color: #ff4757; font-size: 1rem; min-width: 50px; text-align: right; }
 
-    .radius-row label { margin: 0; white-space: nowrap; font-size: 0.9rem; }
-
-    input[type=range] {
-      flex: 1;
-      padding: 0;
-      border: none;
-      background: transparent;
-      accent-color: #ff4757;
-    }
-
-    .radius-val {
-      font-weight: 900;
-      color: #ff4757;
-      font-size: 1rem;
-      min-width: 50px;
-      text-align: right;
-    }
-
-    /* SCREEN COUNT */
     .screen-count-box {
       background: #f7f3ee;
       border-radius: 14px;
@@ -289,54 +267,57 @@
       align-items: center;
       gap: 12px;
     }
-
     .screen-count-box .icon { font-size: 1.5rem; }
-
     .screen-count-box .text { font-size: 0.95rem; color: #666; font-weight: 600; }
     .screen-count-box .text strong { color: #1a1a2e; font-size: 1.1rem; }
 
-    /* PRICE BOX */
     .price-box {
       background: #1a1a2e;
       border-radius: 20px;
       padding: 28px;
-      margin-top: 20px;
+      margin-top: 0;
     }
-
-    .price-top {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
+    .price-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; }
     .price-label { color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; }
     .price-amount { font-size: 3rem; font-weight: 900; color: white; }
     .price-sub { color: rgba(255,255,255,0.35); font-size: 0.8rem; font-weight: 600; margin-top: 2px; text-align: right; }
 
-    .duration-selector {
-      display: flex;
-      gap: 10px;
-    }
-
+    .duration-selector { display: flex; gap: 10px; }
     .duration-btn {
-      flex: 1;
-      padding: 12px;
+      flex: 1; padding: 12px;
       border: 2px solid rgba(255,255,255,0.15);
       border-radius: 12px;
       background: transparent;
       color: rgba(255,255,255,0.5);
       cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 800;
+      font-size: 0.9rem; font-weight: 800;
       font-family: 'Nunito', sans-serif;
       transition: all 0.2s;
     }
-
     .duration-btn:hover { border-color: rgba(255,255,255,0.4); color: white; }
     .duration-btn.selected { background: #ff4757; border-color: #ff4757; color: white; }
 
-    /* SUBMIT */
+    .payment-methods { display: flex; gap: 10px; margin-top: 0; }
+    .pay-btn {
+      flex: 1; padding: 14px;
+      border: 2.5px solid #eee;
+      border-radius: 14px;
+      background: white;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #1a1a2e;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .pay-btn:hover { border-color: #1a1a2e; transform: translateY(-1px); }
+    .pay-btn.selected { border-color: #ff4757; background: #fff5f6; }
+    .ideal-logo { font-weight: 900; color: #cc0066; font-size: 1.1rem; }
+
     .submit-btn {
       width: 100%;
       padding: 20px;
@@ -352,7 +333,6 @@
       transition: all 0.2s;
       letter-spacing: 1px;
     }
-
     .submit-btn:hover { background: #e03040; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,71,87,0.35); }
     .submit-btn:disabled { background: #ddd; color: #aaa; transform: none; box-shadow: none; cursor: not-allowed; }
 
@@ -363,7 +343,6 @@
       color: #aaa;
       font-weight: 600;
     }
-
     .reassurance span { color: #2ed573; font-weight: 800; }
   </style>
 </head>
@@ -372,114 +351,157 @@
 <header>
   <div>
     <div class="logo">MISSIGN</div>
-    <div class="tagline">Digital missing posters, instantly</div>
+    <div class="tagline">Digitale vermistposter — direct live</div>
   </div>
 </header>
 
 <div class="hero">
-  <h1>Get the word out<br><span>in seconds.</span></h1>
-  <p>When every minute counts, Missign puts your missing poster on screens near where they were last seen — instantly.</p>
+  <h1>Breng het nieuws<br><span>in enkele seconden.</span></h1>
+  <p>Als elke minuut telt, plaatst Missign jouw vermistposter op schermen in de buurt van waar ze voor het laatst zijn gezien — meteen.</p>
   <div class="hero-steps">
-    <div class="step"><div class="step-num">1</div> Fill in the details</div>
-    <div class="step"><div class="step-num">2</div> Choose your area</div>
-    <div class="step"><div class="step-num">3</div> Go live instantly</div>
+    <div class="step"><div class="step-num">1</div> Vul de gegevens in</div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-num">2</div> Kies het zoekgebied</div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-num">3</div> Direct live</div>
   </div>
 </div>
 
 <div class="container">
-  <div class="form-card">
 
-    <div class="section-title">Who is missing?</div>
-    <div class="type-selector">
-      <button class="type-btn" data-type="human" onclick="selectType('human')">
-        <span class="emoji">👤</span>
-        <span class="label">Person</span>
-      </button>
-      <button class="type-btn" data-type="dog" onclick="selectType('dog')">
-        <span class="emoji">🐶</span>
-        <span class="label">Dog</span>
-      </button>
-      <button class="type-btn" data-type="cat" onclick="selectType('cat')">
-        <span class="emoji">🐱</span>
-        <span class="label">Cat</span>
-      </button>
-      <button class="type-btn" data-type="other" onclick="selectType('other')">
-        <span class="emoji">❓</span>
-        <span class="label">Other</span>
-      </button>
+  <!-- STEP 1 -->
+  <div class="step-section">
+    <div class="step-track">
+      <div class="track-num">1</div>
+      <div class="track-line"></div>
     </div>
+    <div class="step-card">
+      <div class="step-card-title">Wie wordt er vermist?</div>
 
-    <div class="section-title">Their details</div>
-
-    <div class="form-group">
-      <label>Name <span class="hint">First name or full name</span></label>
-      <input type="text" id="name" placeholder="e.g. Buddy, Max, Sarah..." maxlength="30" oninput="updateChar('name', 30)"/>
-      <div class="char-row"><span class="char-count" id="name-count">30 left</span></div>
-    </div>
-
-    <div class="form-group">
-      <label>Description <span class="hint">What do they look like?</span></label>
-      <textarea id="description" placeholder="Breed, colour, age, what they were wearing, any distinguishing features..." maxlength="160" oninput="updateChar('description', 160)"></textarea>
-      <div class="char-row"><span class="char-count" id="description-count">160 left</span></div>
-    </div>
-
-    <div class="form-group">
-      <label>Your phone number <span class="hint">Shown on the display</span></label>
-      <input type="tel" id="contact" placeholder="e.g. 06 1234 5678" maxlength="20" oninput="updateChar('contact', 20)"/>
-      <div class="char-row"><span class="char-count" id="contact-count">20 left</span></div>
-    </div>
-
-    <div class="form-group">
-      <label>Photo <span class="hint">Optional but really helps</span></label>
-      <div class="photo-upload" id="photoUpload" onclick="document.getElementById('photoInput').click()">
-        <input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(event)" />
-        <div class="icon">📷</div>
-        <div class="text" id="photoLabel">Tap to add a photo</div>
+      <div class="type-selector">
+        <button class="type-btn" data-type="human" onclick="selectType('human')">
+          <span class="emoji">👤</span><span class="label">Persoon</span>
+        </button>
+        <button class="type-btn" data-type="dog" onclick="selectType('dog')">
+          <span class="emoji">🐶</span><span class="label">Hond</span>
+        </button>
+        <button class="type-btn" data-type="cat" onclick="selectType('cat')">
+          <span class="emoji">🐱</span><span class="label">Kat</span>
+        </button>
+        <button class="type-btn" data-type="other" onclick="selectType('other')">
+          <span class="emoji">❓</span><span class="label">Anders</span>
+        </button>
       </div>
-    </div>
 
-    <div class="section-title">Where were they last seen?</div>
-
-    <div class="form-group">
-      <div id="map"></div>
-      <div class="radius-row">
-        <label>Search radius</label>
-        <input type="range" min="0.5" max="20" step="0.5" value="2" oninput="updateRadius(this.value)" onchange="updateRadius(this.value)" />
-        <span class="radius-val"><span id="radiusLabel">2</span> km</span>
-      </div>
-    </div>
-
-    <div class="screen-count-box">
-      <span class="icon">📺</span>
-      <span class="text">Your ad will show on <strong id="screenCount">0</strong> screens in this area</span>
-    </div>
-
-    <div class="section-title">How long?</div>
-
-    <div class="price-box">
-      <div class="price-top">
-        <div>
-          <div class="price-label">TOTAL PRICE</div>
-          <div class="price-amount" id="totalPrice">€0</div>
+      <div class="other-field" id="otherField">
+        <div style="margin-top:14px">
+          <label>Wat is er vermist? <span class="hint">bijv. konijn, vogel, paard...</span></label>
+          <input type="text" id="otherType" placeholder="Omschrijf het dier of de persoon" maxlength="40" oninput="updateChar('otherType', 40)"/>
+          <div class="char-row"><span class="char-count" id="otherType-count">40 over</span></div>
         </div>
-        <div class="price-sub">€2 per screen<br>per day</div>
       </div>
-      <div class="duration-selector">
-        <button class="duration-btn selected" onclick="selectDuration(1, this)">1 day</button>
-        <button class="duration-btn" onclick="selectDuration(3, this)">3 days</button>
-        <button class="duration-btn" onclick="selectDuration(7, this)">7 days</button>
+
+      <div class="section-label" style="margin-top:28px">Gegevens</div>
+
+      <div class="form-group">
+        <label>Naam <span class="hint">Voornaam of volledige naam</span></label>
+        <input type="text" id="name" placeholder="bijv. Buddy, Max, Sarah..." maxlength="30" oninput="updateChar('name', 30)"/>
+        <div class="char-row"><span class="char-count" id="name-count">30 over</span></div>
+      </div>
+
+      <div class="form-group">
+        <label>Omschrijving <span class="hint">Hoe zien ze eruit?</span></label>
+        <textarea id="description" placeholder="Ras, kleur, leeftijd, wat ze droegen, bijzondere kenmerken..." maxlength="160" oninput="updateChar('description', 160)"></textarea>
+        <div class="char-row"><span class="char-count" id="description-count">160 over</span></div>
+      </div>
+
+      <div class="form-group">
+        <label>Jouw telefoonnummer <span class="hint">Wordt getoond op het scherm</span></label>
+        <input type="tel" id="contact" placeholder="bijv. 06 1234 5678" maxlength="20" oninput="updateChar('contact', 20)"/>
+        <div class="char-row"><span class="char-count" id="contact-count">20 over</span></div>
+      </div>
+
+      <div class="form-group">
+        <label>Foto <span class="hint">Optioneel maar heel waardevol</span></label>
+        <div class="photo-upload" id="photoUpload" onclick="document.getElementById('photoInput').click()">
+          <input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(event)" />
+          <div class="icon">📷</div>
+          <div class="text" id="photoLabel">Tik om een foto toe te voegen</div>
+        </div>
       </div>
     </div>
-
-    <button class="submit-btn" id="submitBtn" onclick="submitAd()">
-      🔍 Put my poster live now
-    </button>
-
-    <div class="reassurance">
-      <span>✓ Goes live instantly</span> &nbsp;·&nbsp; No account needed &nbsp;·&nbsp; Cancel anytime
-    </div>
-
   </div>
+
+  <!-- STEP 2 -->
+  <div class="step-section">
+    <div class="step-track">
+      <div class="track-num">2</div>
+      <div class="track-line"></div>
+    </div>
+    <div class="step-card">
+      <div class="step-card-title">Waar werden ze voor het laatst gezien?</div>
+
+      <div class="form-group">
+        <div id="map"></div>
+        <div class="radius-row">
+          <label>Zoekradius</label>
+          <input type="range" min="0.5" max="20" step="0.5" value="2" oninput="updateRadius(this.value)" onchange="updateRadius(this.value)" />
+          <span class="radius-val"><span id="radiusLabel">2</span> km</span>
+        </div>
+      </div>
+
+      <div class="screen-count-box">
+        <span class="icon">📺</span>
+        <span class="text">Jouw poster wordt getoond op <strong id="screenCount">0</strong> schermen in dit gebied</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-section">
+    <div class="step-track">
+      <div class="track-num">3</div>
+      <div class="track-line last"></div>
+    </div>
+    <div class="step-card">
+      <div class="step-card-title">Betalen &amp; live gaan</div>
+
+      <div class="section-label">Hoe lang?</div>
+      <div class="price-box">
+        <div class="price-top">
+          <div>
+            <div class="price-label">TOTAALPRIJS</div>
+            <div class="price-amount" id="totalPrice">€0</div>
+          </div>
+          <div class="price-sub">€2 per scherm<br>per dag</div>
+        </div>
+        <div class="duration-selector">
+          <button class="duration-btn selected" onclick="selectDuration(1, this)">1 dag</button>
+          <button class="duration-btn" onclick="selectDuration(3, this)">3 dagen</button>
+          <button class="duration-btn" onclick="selectDuration(7, this)">7 dagen</button>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:24px">Betaalmethode</div>
+      <div class="payment-methods">
+        <button class="pay-btn selected" id="pay-ideal" onclick="selectPayment('ideal')">
+          <span class="ideal-logo">iDEAL</span> Betaal met iDEAL
+        </button>
+        <button class="pay-btn" id="pay-card" onclick="selectPayment('card')">
+          💳 Creditcard
+        </button>
+      </div>
+
+      <button class="submit-btn" id="submitBtn" onclick="submitAd()">
+        🔍 Zet mijn poster nu live
+      </button>
+
+      <div class="reassurance">
+        <span>✓ Direct live</span> &nbsp;·&nbsp; Geen account nodig &nbsp;·&nbsp; Veilig betalen
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -490,6 +512,7 @@
 
   let selectedType = null;
   let selectedDuration = 1;
+  let selectedPayment = 'ideal';
   let marker = null;
   let circle = null;
   let radiusKm = 2;
@@ -501,14 +524,14 @@
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
   async function loadScreens() {
-    const res = await fetch(SUPABASE_URL + '/rest/v1/screens?active=eq.true', {
+    var res = await fetch(SUPABASE_URL + '/rest/v1/screens?active=eq.true', {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
     });
     allScreens = await res.json();
-    allScreens.forEach(function(screen) {
-      L.marker([screen.lat, screen.lng], {
-        icon: L.divIcon({ className: '', html: '📺', iconSize: [24, 24] })
-      }).addTo(map).bindPopup(screen.name);
+    allScreens.forEach(function(s) {
+      L.marker([s.lat, s.lng], {
+        icon: L.divIcon({ className: '', html: '📺', iconSize: [24,24] })
+      }).addTo(map).bindPopup(s.name);
     });
   }
 
@@ -556,6 +579,8 @@
     document.querySelectorAll('.type-btn').forEach(function(btn) {
       btn.classList.toggle('selected', btn.dataset.type === type);
     });
+    var otherField = document.getElementById('otherField');
+    otherField.classList.toggle('visible', type === 'other');
   }
 
   function selectDuration(days, btn) {
@@ -565,12 +590,20 @@
     updatePrice();
   }
 
+  function selectPayment(method) {
+    selectedPayment = method;
+    document.querySelectorAll('.pay-btn').forEach(function(b) { b.classList.remove('selected'); });
+    document.getElementById('pay-' + method).classList.add('selected');
+  }
+
   function updateChar(id, max) {
-    var val = document.getElementById(id).value.length;
-    var el = document.getElementById(id + '-count');
-    var left = max - val;
-    el.textContent = left + ' left';
-    el.classList.toggle('warn', left <= 10);
+    var el = document.getElementById(id);
+    if (!el) return;
+    var left = max - el.value.length;
+    var counter = document.getElementById(id + '-count');
+    if (!counter) return;
+    counter.textContent = left + ' over';
+    counter.classList.toggle('warn', left <= 10);
   }
 
   function handlePhoto(event) {
@@ -593,28 +626,29 @@
 
   async function submitAd() {
     try {
-      if (!selectedType) return alert('Please select who is missing');
-      if (!document.getElementById('name').value) return alert('Please enter a name');
-      if (!document.getElementById('contact').value) return alert('Please enter your phone number');
-      if (!marker) return alert('Please drop a pin where they were last seen');
-      if (screensInRadius.length === 0) return alert('No screens found in your area — try a larger radius');
+      if (!selectedType) return alert('Selecteer wie er vermist is');
+      if (selectedType === 'other' && !document.getElementById('otherType').value) return alert('Vul in wat er vermist is');
+      if (!document.getElementById('name').value) return alert('Vul een naam in');
+      if (!document.getElementById('contact').value) return alert('Vul je telefoonnummer in');
+      if (!marker) return alert('Zet een pin op de kaart waar ze voor het laatst zijn gezien');
+      if (screensInRadius.length === 0) return alert('Geen schermen gevonden in dit gebied — probeer een grotere radius');
 
       var btn = document.getElementById('submitBtn');
-      btn.textContent = 'Going live...';
+      btn.textContent = 'Bezig met plaatsen...';
       btn.disabled = true;
 
       var ll = marker.getLatLng();
       var image_url = await uploadPhoto();
+      var typeValue = selectedType === 'other' ? document.getElementById('otherType').value : selectedType;
 
       var body = {
         name: document.getElementById('name').value,
-        type: selectedType,
+        type: typeValue,
         description: document.getElementById('description').value,
         contact: document.getElementById('contact').value,
         image_url: image_url,
         status: 'active',
-        lat: ll.lat,
-        lng: ll.lng,
+        lat: ll.lat, lng: ll.lng,
         radius: radiusKm,
         duration_days: selectedDuration
       };
@@ -631,17 +665,17 @@
       });
 
       if (insertRes.ok || insertRes.status === 201) {
-        btn.textContent = '✅ Your poster is live!';
+        btn.textContent = '✅ Jouw poster staat live!';
         btn.style.background = '#2ed573';
       } else {
         var t = await insertRes.text();
-        btn.textContent = '🔍 Put my poster live now';
+        btn.textContent = '🔍 Zet mijn poster nu live';
         btn.disabled = false;
-        alert('Something went wrong: ' + t);
+        alert('Er ging iets mis: ' + t);
       }
     } catch(e) {
-      alert('Error: ' + e.message);
-      document.getElementById('submitBtn').textContent = '🔍 Put my poster live now';
+      alert('Fout: ' + e.message);
+      document.getElementById('submitBtn').textContent = '🔍 Zet mijn poster nu live';
       document.getElementById('submitBtn').disabled = false;
     }
   }
