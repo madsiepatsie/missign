@@ -331,6 +331,22 @@
     document.getElementById('photoLabel').textContent = `✅ ${photoFile.name}`;
   }
 
+async function uploadPhoto() {
+    if (!photoFile) return null;
+    const filename = `${Date.now()}_${photoFile.name}`;
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/photos/${filename}`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': photoFile.type
+      },
+      body: photoFile
+    });
+    if (!res.ok) return null;
+    return `${SUPABASE_URL}/storage/v1/object/public/photos/${filename}`;
+  }
+
   async function submitAd() {
     if (!selectedType) return alert('Please select a type');
     if (!document.getElementById('name').value) return alert('Please enter a name');
@@ -341,12 +357,15 @@
     alert('Payment coming soon! For now your ad will go live immediately.');
 
     const { lat, lng } = marker.getLatLng();
+
+    const image_url = await uploadPhoto();
+
     const body = {
       name: document.getElementById('name').value,
       type: selectedType,
       description: document.getElementById('description').value,
       contact: document.getElementById('contact').value,
-      image_url: null,
+      image_url,
       status: 'active',
       lat, lng,
       radius: radiusKm,
