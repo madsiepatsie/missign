@@ -115,7 +115,7 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
   async function fetchAds() {
-  const screenRes = await fetch(`${SUPABASE_URL}/rest/v1/screens?name=eq.Screen%201`, {
+  const screenRes = await fetch(`${SUPABASE_URL}/rest/v1/screens?name=eq.Screen%1`, {
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
