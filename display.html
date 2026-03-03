@@ -4,103 +4,209 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Missign Display</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      background: #000;
+      background: #0a0a0a;
       color: #fff;
-      font-family: Arial, sans-serif;
+      font-family: 'DM Sans', sans-serif;
       height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 100vh;
+      width: 100vw;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(1.02); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* LEFT — photo side */
+    .photo-side {
+      position: relative;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .photo-side img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 10rem;
+      background: #151515;
+    }
+
+    .missing-tape {
+      position: absolute;
+      top: 48px;
+      left: -10px;
+      background: #ff2323;
+      color: white;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 8px;
+      padding: 10px 40px 10px 20px;
+      clip-path: polygon(0 0, 100% 0, 96% 100%, 0 100%);
+      z-index: 10;
+    }
+
+    .photo-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to top, #0a0a0a, transparent);
+    }
+
+    /* RIGHT — info side */
+    .info-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 50px;
+      background: #0a0a0a;
+      position: relative;
+    }
+
+    .type-tag {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: #ff2323;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 6rem;
+      line-height: 0.9;
+      color: #fff;
+      margin-bottom: 24px;
+      word-break: break-word;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: #ff2323;
+      margin-bottom: 28px;
+    }
+
+    .description {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: #bbb;
+      margin-bottom: 40px;
+      max-height: 180px;
       overflow: hidden;
     }
-    .screen {
-      width: 100%;
+
+    .contact-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .contact {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: #ffdd00;
+      letter-spacing: 3px;
+    }
+
+    .branding {
+      position: absolute;
+      bottom: 28px;
+      right: 36px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 6px;
+      color: #222;
+    }
+
+    /* No ads state */
+    .no-ads-screen {
       height: 100vh;
+      width: 100vw;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px;
-      text-align: center;
+      background: #0a0a0a;
     }
-    .label {
-      background: #ff3b3b;
-      color: white;
-      font-size: 2rem;
-      font-weight: bold;
-      padding: 10px 40px;
-      border-radius: 8px;
-      margin-bottom: 30px;
-      letter-spacing: 4px;
+
+    .no-ads-screen .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      letter-spacing: 10px;
+      color: #1a1a1a;
     }
-    .photo {
-      width: 300px;
-      height: 300px;
-      object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 30px;
-      border: 4px solid white;
+
+    .no-ads-screen .sub {
+      font-size: 0.85rem;
+      color: #2a2a2a;
+      letter-spacing: 3px;
+      margin-top: 12px;
     }
-    .no-photo {
-      width: 300px;
-      height: 300px;
-      background: #222;
-      border-radius: 12px;
-      margin-bottom: 30px;
+
+    /* Pulse dot */
+    .live-dot {
+      position: absolute;
+      top: 28px;
+      right: 36px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 5rem;
-    }
-    .name {
-      font-size: 3rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .type {
-      font-size: 1.5rem;
-      color: #aaa;
-      margin-bottom: 20px;
-    }
-    .description {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-    .contact {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #ffdd00;
-    }
-    .no-ads {
-      font-size: 2rem;
-      color: #555;
-    }
-    .branding {
-      position: fixed;
-      bottom: 20px;
-      right: 30px;
-      font-size: 1rem;
-      color: #333;
+      gap: 8px;
+      font-size: 0.7rem;
       letter-spacing: 2px;
+      color: #333;
+    }
+
+    .live-dot::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff2323;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
     }
   </style>
 </head>
 <body>
 
-<div class="screen" id="screen">
-  <div class="no-ads">Loading...</div>
-</div>
-
-<div class="branding">MISSIGN</div>
+<div id="root"></div>
 
 <script>
-  const SUPABASE_URL = 'https://oghquovomayveqmgdtgc.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_hBgiydGxVH2CPankB16S5Q_6n5Bz5Cn';
+const SUPABASE_URL = 'https://oghquovomayveqmgdtgc.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_hBgiydGxVH2CPankB16S5Q_6n5Bz5Cn';
 
   let currentIndex = 0;
   let ads = [];
@@ -117,25 +223,17 @@
 
   async function fetchAds() {
     try {
-      const screenRes = await fetch(`${SUPABASE_URL}/rest/v1/screens?name=eq.screen1`, {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-        }
+      const screenRes = await fetch(${SUPABASE_URL}/rest/v1/screens?name=eq.screen1, {
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': Bearer ${SUPABASE_ANON_KEY} }
       });
       const screens = await screenRes.json();
       const screen = screens[0];
-      if (!screen) { document.title = 'no screen found'; showNoAds(); return; }
-      document.title = 'screen ok';
+      if (!screen) { showNoAds(); return; }
 
-      const allAdsRes = await fetch(`${SUPABASE_URL}/rest/v1/ads?status=eq.active&order=created_at.desc`, {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-        }
+      const allAdsRes = await fetch(${SUPABASE_URL}/rest/v1/ads?status=eq.active&order=created_at.desc, {
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': Bearer ${SUPABASE_ANON_KEY} }
       });
       const allAds = await allAdsRes.json();
-      document.title = 'ads ok: ' + allAds.length;
       ads = allAds.filter(ad => {
         if (!ad.lat || !ad.lng) return true;
         const d = getDistanceKm(screen.lat, screen.lng, ad.lat, ad.lng);
@@ -144,29 +242,44 @@
       if (ads.length === 0) showNoAds();
       else showAd(currentIndex % ads.length);
     } catch(e) {
-      document.title = 'error: ' + e.message;
       showNoAds();
     }
   }
 
   function showAd(index) {
     const ad = ads[index];
-    const emoji = ad.type === 'dog' ? '🐶' : ad.type === 'cat' ? '🐱' : '👤';
-    document.getElementById('screen').innerHTML = `
-      <div class="label">MISSING</div>
-      ${ad.image_url
-        ? `<img class="photo" src="${ad.image_url}" alt="${ad.name}" />`
-        : `<div class="no-photo">${emoji}</div>`}
-      <div class="name">${ad.name}</div>
-      <div class="type">${ad.type.toUpperCase()}</div>
-      <div class="description">${ad.description}</div>
-      <div class="contact">📞 ${ad.contact}</div>
+    const emoji = ad.type === 'dog' ? '🐶' : ad.type === 'cat' ? '🐱' : ad.type === 'human' ? '👤' : '❓';
+    const typeLabel = ad.type === 'human' ? 'Missing Person' : Missing ${ad.type.charAt(0).toUpperCase() + ad.type.slice(1)};
+
+    document.getElementById('root').innerHTML = `
+      <div class="card">
+        <div class="photo-side">
+          <div class="missing-tape">MISSING</div>
+          ${ad.image_url
+            ? <img src="${ad.image_url}" alt="${ad.name}" />
+            : <div class="photo-placeholder">${emoji}</div>}
+          <div class="photo-overlay"></div>
+        </div>
+        <div class="info-side">
+          <div class="live-dot">LIVE</div>
+          <div class="type-tag">${typeLabel}</div>
+          <div class="name">${ad.name}</div>
+          <div class="divider"></div>
+          <div class="description">${ad.description || 'No description provided.'}</div>
+          <div class="contact-label">If found, please call</div>
+          <div class="contact">${ad.contact}</div>
+          <div class="branding">MISSIGN</div>
+        </div>
+      </div>
     `;
   }
 
   function showNoAds() {
-    document.getElementById('screen').innerHTML = `
-      <div class="no-ads">No active ads right now</div>
+    document.getElementById('root').innerHTML = `
+      <div class="no-ads-screen">
+        <div class="logo">MISSIGN</div>
+        <div class="sub">NO ACTIVE ADS</div>
+      </div>
     `;
   }
 
@@ -178,7 +291,6 @@
   }, 10000);
 
   setInterval(fetchAds, 60000);
-
   fetchAds();
 </script>
 </body>
