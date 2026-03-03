@@ -104,7 +104,7 @@
 
   let currentIndex = 0;
   let ads = [];
-  
+
   function getDistanceKm(lat1, lng1, lat2, lng2) {
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -114,34 +114,39 @@
               Math.sin(dLng/2) * Math.sin(dLng/2);
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
-  async function fetchAds() {
-  const screenRes = await fetch(`${SUPABASE_URL}/rest/v1/screens?name=eq.Screen%1`, {
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-      }
-    });
-    const screens = await screenRes.json();
-    const screen = screens[0];
-    if (!screen) { document.title = 'no screen found'; showNoAds(); return; }
-    document.title = 'screen ok: ' + screen.name;
 
-    const allAdsRes = await fetch(`${SUPABASE_URL}/rest/v1/ads?status=eq.active&order=created_at.desc`, {
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-      }
-    });
-const allAds = await allAdsRes.json();
-    ads = allAds.filter(ad => {
-      if (!ad.lat || !ad.lng) return true;
-      const d = getDistanceKm(screen.lat, screen.lng, ad.lat, ad.lng);
-      return d <= ad.radius;
-    });
-    console.log('ads fetched:', ads);
-    document.title = JSON.stringify(ads);
-    if (ads.length === 0) showNoAds();
-    else showAd(currentIndex % ads.length);
+  async function fetchAds() {
+    try {
+      const screenRes = await fetch(`${SUPABASE_URL}/rest/v1/screens?name=eq.screen1`, {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+      const screens = await screenRes.json();
+      const screen = screens[0];
+      if (!screen) { document.title = 'no screen found'; showNoAds(); return; }
+      document.title = 'screen ok';
+
+      const allAdsRes = await fetch(`${SUPABASE_URL}/rest/v1/ads?status=eq.active&order=created_at.desc`, {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+      const allAds = await allAdsRes.json();
+      document.title = 'ads ok: ' + allAds.length;
+      ads = allAds.filter(ad => {
+        if (!ad.lat || !ad.lng) return true;
+        const d = getDistanceKm(screen.lat, screen.lng, ad.lat, ad.lng);
+        return d <= ad.radius;
+      });
+      if (ads.length === 0) showNoAds();
+      else showAd(currentIndex % ads.length);
+    } catch(e) {
+      document.title = 'error: ' + e.message;
+      showNoAds();
+    }
   }
 
   function showAd(index) {
@@ -165,7 +170,6 @@ const allAds = await allAdsRes.json();
     `;
   }
 
-  // Rotate ads every 10 seconds
   setInterval(() => {
     if (ads.length > 0) {
       currentIndex = (currentIndex + 1) % ads.length;
@@ -173,10 +177,8 @@ const allAds = await allAdsRes.json();
     }
   }, 10000);
 
-  // Refresh from database every 60 seconds
   setInterval(fetchAds, 60000);
 
-  // Initial load
   fetchAds();
 </script>
 </body>
