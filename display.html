@@ -3,131 +3,182 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
   <title>Missign Display</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      background: #0a0a0a;
-      color: #fff;
-      font-family: 'DM Sans', sans-serif;
+      background: #f7f3ee;
+      font-family: 'Nunito', sans-serif;
       height: 100vh;
       width: 100vw;
       overflow: hidden;
     }
+
+    /* CARD LAYOUT */
     .card {
       display: grid;
       grid-template-columns: 1fr 1fr;
       height: 100vh;
       width: 100vw;
-      animation: fadeIn 0.8s ease;
+      animation: fadeIn 0.7s ease;
     }
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(1.02); }
+      from { opacity: 0; transform: scale(1.015); }
       to { opacity: 1; transform: scale(1); }
     }
+
+    /* LEFT SIDE */
     .photo-side {
+      background: #1a1a2e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
       position: relative;
+      gap: 28px;
+    }
+
+    .missing-badge {
+      background: #ff4757;
+      color: white;
+      font-size: 3.6rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      padding: 16px 48px;
+      border-radius: 60px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(255,71,87,0.4);
+      z-index: 2;
+    }
+
+    .photo-frame {
+      width: 100%;
+      flex: 1;
+      max-height: 60vh;
+      border-radius: 24px;
+      border: 6px solid rgba(255,255,255,0.12);
       overflow: hidden;
-      background: #111;
-    }
-    .photo-side img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .photo-placeholder {
-      width: 100%;
-      height: 100%;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+      background: #111128;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10rem;
-      background: #151515;
     }
-    .missing-tape {
-      position: absolute;
-      top: 48px;
-      left: -10px;
-      background: #ff2323;
-      color: white;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.8rem;
-      letter-spacing: 8px;
-      padding: 10px 40px 10px 20px;
-      clip-path: polygon(0 0, 100% 0, 96% 100%, 0 100%);
-      z-index: 10;
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
-    .photo-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 120px;
-      background: linear-gradient(to top, #0a0a0a, transparent);
+
+    .photo-placeholder {
+      font-size: 9rem;
     }
+
+    .type-pill {
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.7);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      padding: 8px 28px;
+      border-radius: 40px;
+      text-transform: uppercase;
+    }
+
+    /* RIGHT SIDE */
     .info-side {
+      background: #f7f3ee;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 60px 50px;
-      background: #0a0a0a;
+      padding: 56px 56px 56px 56px;
       position: relative;
+      gap: 20px;
     }
-    .type-tag {
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 4px;
-      color: #ff2323;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
+
     .name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 6rem;
-      line-height: 0.9;
-      color: #fff;
-      margin-bottom: 24px;
+      font-size: 7rem;
+      font-weight: 900;
+      color: #1a1a2e;
+      line-height: 0.95;
       word-break: break-word;
     }
-    .divider {
-      width: 60px;
-      height: 3px;
-      background: #ff2323;
-      margin-bottom: 28px;
-    }
+
     .description {
-      font-size: 1.15rem;
-      line-height: 1.7;
-      color: #bbb;
-      margin-bottom: 40px;
-      max-height: 180px;
-      overflow: hidden;
+      font-size: 1.8rem;
+      line-height: 1.6;
+      color: #555;
+      font-weight: 400;
     }
+
+    .contact-block {
+      margin-top: 8px;
+    }
+
     .contact-label {
-      font-size: 0.75rem;
+      font-size: 1rem;
       font-weight: 700;
       letter-spacing: 3px;
-      color: #555;
+      color: #aaa;
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
+
     .contact {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3rem;
-      color: #ffdd00;
-      letter-spacing: 3px;
+      font-size: 3.4rem;
+      font-weight: 900;
+      color: #1a1a2e;
+      letter-spacing: 2px;
+      padding-bottom: 16px;
+      border-bottom: 4px solid #ff4757;
+      display: inline-block;
     }
+
     .branding {
       position: absolute;
-      bottom: 28px;
-      right: 36px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
+      bottom: 24px;
+      right: 32px;
+      font-size: 1rem;
+      font-weight: 900;
       letter-spacing: 6px;
-      color: #222;
+      color: #ddd;
     }
+
+    .live-indicator {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #bbb;
+    }
+
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff4757;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.7); }
+    }
+
+    /* NO ADS */
     .no-ads-screen {
       height: 100vh;
       width: 100vw;
@@ -135,55 +186,41 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #0a0a0a;
+      background: #1a1a2e;
+      gap: 16px;
     }
+
     .no-ads-screen .logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 4rem;
-      letter-spacing: 10px;
-      color: #1a1a1a;
+      font-size: 5rem;
+      font-weight: 900;
+      letter-spacing: 12px;
+      color: #2a2a4e;
     }
+
     .no-ads-screen .sub {
-      font-size: 0.85rem;
-      color: #2a2a2a;
-      letter-spacing: 3px;
-      margin-top: 12px;
-    }
-    .live-dot {
-      position: absolute;
-      top: 28px;
-      right: 36px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.7rem;
-      letter-spacing: 2px;
-      color: #333;
-    }
-    .live-dot::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ff2323;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
+      font-size: 1rem;
+      color: #333355;
+      letter-spacing: 4px;
     }
   </style>
 </head>
 <body>
-
 <div id="root"></div>
-
 <script>
   const SUPABASE_URL = 'https://oghquovomayveqmgdtgc.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_hBgiydGxVH2CPankB16S5Q_6n5Bz5Cn';
 
+  const MAX_NAME = 24;
+  const MAX_DESC = 120;
+  const MAX_CONTACT = 20;
+
   let currentIndex = 0;
   let ads = [];
+
+  function cap(str, max) {
+    if (!str) return '';
+    return str.length > max ? str.substring(0, max) + '…' : str;
+  }
 
   function getDistanceKm(lat1, lng1, lat2, lng2) {
     const R = 6371;
@@ -210,39 +247,36 @@
       const allAds = await allAdsRes.json();
       ads = allAds.filter(function(ad) {
         if (!ad.lat || !ad.lng) return true;
-        const d = getDistanceKm(screen.lat, screen.lng, ad.lat, ad.lng);
-        return d <= ad.radius;
+        return getDistanceKm(screen.lat, screen.lng, ad.lat, ad.lng) <= ad.radius;
       });
       if (ads.length === 0) showNoAds();
       else showAd(currentIndex % ads.length);
-    } catch(e) {
-      showNoAds();
-    }
+    } catch(e) { showNoAds(); }
   }
 
-  function showAd(index) {
-    const ad = ads[index];
+  function showAd(i) {
+    const ad = ads[i];
     const emoji = ad.type === 'dog' ? '🐶' : ad.type === 'cat' ? '🐱' : ad.type === 'human' ? '👤' : '❓';
     const typeLabel = ad.type === 'human' ? 'Missing Person' : 'Missing ' + ad.type.charAt(0).toUpperCase() + ad.type.slice(1);
     const photoHtml = ad.image_url
-      ? '<img src="' + ad.image_url + '" alt="' + ad.name + '" />'
+      ? '<img src="' + ad.image_url + '" alt="photo" />'
       : '<div class="photo-placeholder">' + emoji + '</div>';
 
     document.getElementById('root').innerHTML =
       '<div class="card">' +
         '<div class="photo-side">' +
-          '<div class="missing-tape">MISSING</div>' +
-          photoHtml +
-          '<div class="photo-overlay"></div>' +
+          '<div class="missing-badge">MISSING</div>' +
+          '<div class="photo-frame">' + photoHtml + '</div>' +
+          '<div class="type-pill">' + typeLabel + '</div>' +
         '</div>' +
         '<div class="info-side">' +
-          '<div class="live-dot">LIVE</div>' +
-          '<div class="type-tag">' + typeLabel + '</div>' +
-          '<div class="name">' + ad.name + '</div>' +
-          '<div class="divider"></div>' +
-          '<div class="description">' + (ad.description || 'No description provided.') + '</div>' +
-          '<div class="contact-label">If found, please call</div>' +
-          '<div class="contact">' + ad.contact + '</div>' +
+          '<div class="live-indicator"><div class="live-dot"></div>LIVE</div>' +
+          '<div class="name">' + cap(ad.name, MAX_NAME) + '</div>' +
+          '<div class="description">' + cap(ad.description || 'No description provided.', MAX_DESC) + '</div>' +
+          '<div class="contact-block">' +
+            '<div class="contact-label">If found, please call</div>' +
+            '<div class="contact">' + cap(ad.contact, MAX_CONTACT) + '</div>' +
+          '</div>' +
           '<div class="branding">MISSIGN</div>' +
         '</div>' +
       '</div>';
@@ -257,12 +291,8 @@
   }
 
   setInterval(function() {
-    if (ads.length > 0) {
-      currentIndex = (currentIndex + 1) % ads.length;
-      showAd(currentIndex);
-    }
+    if (ads.length > 0) { currentIndex = (currentIndex + 1) % ads.length; showAd(currentIndex); }
   }, 10000);
-
   setInterval(fetchAds, 60000);
   fetchAds();
 </script>
