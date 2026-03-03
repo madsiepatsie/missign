@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Missign — Betaling geslaagd</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #fdf9f6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 56px 48px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(26,26,46,0.1);
+    }
+    .icon { font-size: 4rem; margin-bottom: 24px; }
+    h1 { font-size: 2rem; font-weight: 900; color: #1a1a2e; margin-bottom: 12px; }
+    p { font-size: 1.05rem; color: #666; line-height: 1.7; margin-bottom: 32px; }
+    .back-btn {
+      display: inline-block;
+      padding: 16px 32px;
+      background: #ff4757;
+      color: white;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { background: #e03040; transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">✅</div>
+    <h1>Jouw poster staat live!</h1>
+    <p>Bedankt voor je betaling. Je vermistposter wordt nu getoond op alle schermen in het gekozen gebied. We hopen dat je snel goed nieuws ontvangt. 🙏</p>
+    <a href="/" class="back-btn">Nog een poster plaatsen</a>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://oghquovomayveqmgdtgc.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_hBgiydGxVH2CPankB16S5Q_6n5Bz5Cn';
+
+    async function saveAd() {
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id');
+      if (!sessionId) return;
+
+      const res = await fetch('/api/save-ad?session_id=' + sessionId);
+      const data = await res.json();
+      if (!data.success) console.error('Save failed:', data.error);
+    }
+
+    saveAd();
+  </script>
+</body>
+</html>
