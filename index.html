@@ -624,7 +624,7 @@
     return SUPABASE_URL + '/storage/v1/object/public/photos/' + filename;
   }
 
-  async function submitAd() {
+async function submitAd() {
     try {
       if (!selectedType) return alert('Selecteer wie er vermist is');
       if (selectedType === 'other' && !document.getElementById('otherType').value) return alert('Vul in wat er vermist is');
@@ -634,44 +634,46 @@
       if (screensInRadius.length === 0) return alert('Geen schermen gevonden in dit gebied — probeer een grotere radius');
 
       var btn = document.getElementById('submitBtn');
-      btn.textContent = 'Bezig met plaatsen...';
+      btn.textContent = 'Bezig met laden...';
       btn.disabled = true;
 
       var ll = marker.getLatLng();
       var image_url = await uploadPhoto();
       var typeValue = selectedType === 'other' ? document.getElementById('otherType').value : selectedType;
+      var totalAmount = screensInRadius.length * PRICE_PER_SCREEN_PER_DAY * selectedDuration * 100;
 
-      var body = {
+      var adData = {
         name: document.getElementById('name').value,
         type: typeValue,
         description: document.getElementById('description').value,
         contact: document.getElementById('contact').value,
         image_url: image_url,
         status: 'active',
-        lat: ll.lat, lng: ll.lng,
+        lat: ll.lat,
+        lng: ll.lng,
         radius: radiusKm,
-        duration_days: selectedDuration
+        duration_days: selectedDuration,
+        screenCount: screensInRadius.length
       };
 
-      var insertRes = await fetch(SUPABASE_URL + '/rest/v1/ads', {
+      var res = await fetch('/api/create-checkout', {
         method: 'POST',
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify(body)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: totalAmount,
+          adData: adData,
+          paymentMethod: selectedPayment
+        })
       });
 
-      if (insertRes.ok || insertRes.status === 201) {
-        btn.textContent = '✅ Jouw poster staat live!';
-        btn.style.background = '#2ed573';
+      var data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url;
       } else {
-        var t = await insertRes.text();
+        alert('Er ging iets mis: ' + (data.error || 'onbekende fout'));
         btn.textContent = '🔍 Zet mijn poster nu live';
         btn.disabled = false;
-        alert('Er ging iets mis: ' + t);
       }
     } catch(e) {
       alert('Fout: ' + e.message);
