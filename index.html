@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Missign</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; color: #111; }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 20px 40px;
+      font-size: 1.8rem;
+      font-weight: bold;
+      letter-spacing: 4px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    h2 { font-size: 1.4rem; margin-bottom: 24px; color: #111; }
+
+    .type-selector {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .type-btn {
+      flex: 1;
+      padding: 16px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      background: white;
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .type-btn:hover { border-color: #111; }
+    .type-btn.selected { border-color: #111; background: #111; color: white; }
+
+    .type-btn .emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
+
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 0.9rem; }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    input:focus, textarea:focus { border-color: #111; }
+    textarea { height: 100px; resize: vertical; }
+
+    .photo-upload {
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: border 0.2s;
+    }
+
+    .photo-upload:hover { border-color: #111; }
+    .photo-upload input { display: none; }
+
+    #map {
+      height: 350px;
+      border-radius: 12px;
+      margin-top: 8px;
+      border: 2px solid #ddd;
+    }
+
+    .radius-control {
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+
+    .radius-control input[type=range] {
+      width: 100%;
+      border: none;
+      padding: 0;
+    }
+
+    .screen-count {
+      background: #f0f0f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .screen-count strong { font-size: 1.4rem; }
+
+    .price-box {
+      background: #111;
+      color: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .price-box .price { font-size: 2.5rem; font-weight: bold; }
+    .price-box .price-sub { color: #aaa; font-size: 0.9rem; margin-top: 4px; }
+
+    .duration-selector {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .duration-btn {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #444;
+      border-radius: 8px;
+      background: transparent;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .duration-btn.selected { background: white; color: #111; border-color: white; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: #ff3b3b;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: background 0.2s;
+    }
+
+    .submit-btn:hover { background: #e02020; }
+    .submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+
+<header>MISSIGN</header>
+
+<div class="container">
+  <h2>Report a missing person or pet</h2>
+
+  <!-- Type selector -->
+  <div class="type-selector">
+    <button class="type-btn" data-type="human" onclick="selectType('human')">
+      <span class="emoji">👤</span> Person
+    </button>
+    <button class="type-btn" data-type="dog" onclick="selectType('dog')">
+      <span class="emoji">🐶</span> Dog
+    </button>
+    <button class="type-btn" data-type="cat" onclick="selectType('cat')">
+      <span class="emoji">🐱</span> Cat
+    </button>
+    <button class="type-btn" data-type="other" onclick="selectType('other')">
+      <span class="emoji">❓</span> Other
+    </button>
+  </div>
+
+  <!-- Details -->
+  <div class="form-group">
+    <label>Name</label>
+    <input type="text" id="name" placeholder="What is their name?" />
+  </div>
+
+  <div class="form-group">
+    <label>Description</label>
+    <textarea id="description" placeholder="Age, appearance, what they were wearing / breed, colour, size..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>Your contact number</label>
+    <input type="text" id="contact" placeholder="Phone number" />
+  </div>
+
+  <div class="form-group">
+    <label>Photo (optional)</label>
+    <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
+      <input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(event)" />
+      <span id="photoLabel">📷 Tap to upload a photo</span>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div class="form-group">
+    <label>Where were they last seen? Drop a pin and set your radius.</label>
+    <div id="map"></div>
+    <div class="radius-control">
+      <label>Radius: <span id="radiusLabel">2</span> km</label>
+      <input type="range" min="0.5" max="20" step="0.5" value="2" oninput="updateRadius(this.value)" />
+    </div>
+  </div>
+
+  <!-- Screen count + pricing -->
+  <div class="screen-count">
+    <strong id="screenCount">0</strong> screens in your area
+  </div>
+
+  <div class="price-box">
+    <div>Total price</div>
+    <div class="price" id="totalPrice">€0</div>
+    <div class="price-sub">€2 per screen per day</div>
+    <div class="duration-selector">
+      <button class="duration-btn selected" onclick="selectDuration(1)">1 day</button>
+      <button class="duration-btn" onclick="selectDuration(3)">3 days</button>
+      <button class="duration-btn" onclick="selectDuration(7)">7 days</button>
+    </div>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="submitAd()">Continue to payment →</button>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const SUPABASE_URL = 'https://oghquovomayveqmgdtgc.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_hBgiydGxVH2CPankB16S5Q_6n5Bz5Cn';
+  const PRICE_PER_SCREEN_PER_DAY = 2;
+
+  let selectedType = null;
+  let selectedDuration = 1;
+  let marker = null;
+  let circle = null;
+  let radiusKm = 2;
+  let screensInRadius = [];
+  let allScreens = [];
+  let photoFile = null;
+
+  // Init map centered on your location
+  const map = L.map('map').setView([52.3676, 4.9041], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+  // Load screens from Supabase and show on map
+  async function loadScreens() {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/screens?active=eq.true`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    allScreens = await res.json();
+    allScreens.forEach(screen => {
+      L.marker([screen.lat, screen.lng], {
+        icon: L.divIcon({ className: '', html: '📺', iconSize: [24, 24] })
+      }).addTo(map).bindPopup(screen.name);
+    });
+  }
+
+  // Click on map to drop pin
+  map.on('click', function(e) {
+    const { 52.3676, 4.9041 } = e.latlng;
+    if (marker) map.removeLayer(marker);
+    if (circle) map.removeLayer(circle);
+    marker = L.marker([lat, lng]).addTo(map);
+    circle = L.circle([lat, lng], { radius: radiusKm * 1000, color: '#ff3b3b', fillOpacity: 0.1 }).addTo(map);
+    updateScreenCount(lat, lng);
+  });
+
+  function updateRadius(val) {
+    radiusKm = parseFloat(val);
+    document.getElementById('radiusLabel').textContent = val;
+    if (marker) {
+      const { lat, lng } = marker.getLatLng();
+      if (circle) map.removeLayer(circle);
+      circle = L.circle([lat, lng], { radius: radiusKm * 1000, color: '#ff3b3b', fillOpacity: 0.1 }).addTo(map);
+      updateScreenCount(lat, lng);
+    }
+  }
+
+  function updateScreenCount(lat, lng) {
+    screensInRadius = allScreens.filter(screen => {
+      const d = getDistanceKm(lat, lng, screen.lat, screen.lng);
+      return d <= radiusKm;
+    });
+    document.getElementById('screenCount').textContent = screensInRadius.length;
+    updatePrice();
+  }
+
+  function getDistanceKm(lat1, lng1, lat2, lng2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng/2) * Math.sin(dLng/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  function updatePrice() {
+    const total = screensInRadius.length * PRICE_PER_SCREEN_PER_DAY * selectedDuration;
+    document.getElementById('totalPrice').textContent = `€${total}`;
+  }
+
+  function selectType(type) {
+    selectedType = type;
+    document.querySelectorAll('.type-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.type === type);
+    });
+  }
+
+  function selectDuration(days) {
+    selectedDuration = days;
+    document.querySelectorAll('.duration-btn').forEach(btn => btn.classList.remove('selected'));
+    event.target.classList.add('selected');
+    updatePrice();
+  }
+
+  function handlePhoto(event) {
+    photoFile = event.target.files[0];
+    document.getElementById('photoLabel').textContent = `✅ ${photoFile.name}`;
+  }
+
+  async function submitAd() {
+    if (!selectedType) return alert('Please select a type');
+    if (!document.getElementById('name').value) return alert('Please enter a name');
+    if (!document.getElementById('contact').value) return alert('Please enter a contact number');
+    if (!marker) return alert('Please drop a pin on the map');
+    if (screensInRadius.length === 0) return alert('No screens in your selected area');
+
+    alert('Payment coming soon! For now your ad will go live immediately.');
+
+    const { lat, lng } = marker.getLatLng();
+    const body = {
+      name: document.getElementById('name').value,
+      type: selectedType,
+      description: document.getElementById('description').value,
+      contact: document.getElementById('contact').value,
+      image_url: null,
+      status: 'active',
+      lat, lng,
+      radius: radiusKm,
+      duration_days: selectedDuration
+    };
+
+    await fetch(`${SUPABASE_URL}/rest/v1/ads`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(body)
+    });
+
+    alert('Your ad is now live!');
+  }
+
+  loadScreens();
+</script>
+</body>
+</html>
