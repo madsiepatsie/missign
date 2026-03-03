@@ -269,7 +269,7 @@
 
   // Click on map to drop pin
   map.on('click', function(e) {
-    const { 52.3676, 4.9041 } = e.latlng;
+    const { lat, lng } = e.latlng;
     if (marker) map.removeLayer(marker);
     if (circle) map.removeLayer(circle);
     marker = L.marker([lat, lng]).addTo(map);
