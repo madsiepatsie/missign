@@ -1,27 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
   <title>Missign Display</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
-      background: #f7f3ee;
       font-family: 'Nunito', sans-serif;
+      background: #0a0a0a;
       height: 100vh;
       width: 100vw;
       overflow: hidden;
     }
 
-    /* CARD LAYOUT */
     .card {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 58% 42%;
       height: 100vh;
       width: 100vw;
       animation: fadeIn 0.7s ease;
@@ -32,112 +30,99 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* LEFT SIDE */
+    /* LEFT — full bleed photo */
     .photo-side {
-      background: #1a1a2e;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
       position: relative;
-      gap: 28px;
-    }
-
-    .missing-badge {
-      background: #ff4757;
-      color: white;
-      font-size: 3.6rem;
-      font-weight: 900;
-      letter-spacing: 6px;
-      padding: 16px 48px;
-      border-radius: 60px;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(255,71,87,0.4);
-      z-index: 2;
-    }
-
-    .photo-frame {
-      width: 100%;
-      flex: 1;
-      max-height: 60vh;
-      border-radius: 24px;
-      border: 6px solid rgba(255,255,255,0.12);
       overflow: hidden;
-      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
-      background: #111128;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: #111;
     }
 
-    .photo-frame img {
+    .photo-side img {
       width: 100%;
       height: 100%;
       object-fit: contain;
       display: block;
+      background: #111;
     }
 
     .photo-placeholder {
-      font-size: 9rem;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12rem;
+      background: #151515;
     }
 
-    .type-pill {
-      background: rgba(255,255,255,0.1);
-      color: rgba(255,255,255,0.7);
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 4px;
-      padding: 8px 28px;
-      border-radius: 40px;
-      text-transform: uppercase;
-    }
-
-    /* RIGHT SIDE */
+    /* RIGHT — info */
     .info-side {
       background: #f7f3ee;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 56px 56px 56px 56px;
+      padding: 48px 44px;
       position: relative;
-      gap: 20px;
+      gap: 18px;
+    }
+
+    .missing-badge {
+      background: #ff4757;
+      color: white;
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: 5px;
+      padding: 12px 32px;
+      border-radius: 50px;
+      text-align: center;
+      box-shadow: 0 6px 24px rgba(255,71,87,0.35);
+      align-self: flex-start;
+    }
+
+    .type-tag {
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #aaa;
+      text-transform: uppercase;
     }
 
     .name {
-      font-size: 7rem;
+      font-size: 5.5rem;
       font-weight: 900;
       color: #1a1a2e;
       line-height: 0.95;
       word-break: break-word;
     }
 
-    .description {
-      font-size: 1.8rem;
-      line-height: 1.6;
-      color: #555;
-      font-weight: 400;
+    .divider {
+      width: 56px;
+      height: 4px;
+      background: #ff4757;
+      border-radius: 4px;
     }
 
-    .contact-block {
-      margin-top: 8px;
+    .description {
+      font-size: 1.5rem;
+      line-height: 1.6;
+      color: #555;
+      font-weight: 600;
     }
 
     .contact-label {
-      font-size: 1rem;
-      font-weight: 700;
+      font-size: 0.75rem;
+      font-weight: 800;
       letter-spacing: 3px;
-      color: #aaa;
+      color: #bbb;
       text-transform: uppercase;
-      margin-bottom: 6px;
     }
 
     .contact {
-      font-size: 3.4rem;
+      font-size: 2.8rem;
       font-weight: 900;
       color: #1a1a2e;
       letter-spacing: 2px;
-      padding-bottom: 16px;
+      padding-bottom: 14px;
       border-bottom: 4px solid #ff4757;
       display: inline-block;
     }
@@ -145,8 +130,8 @@
     .branding {
       position: absolute;
       bottom: 24px;
-      right: 32px;
-      font-size: 1rem;
+      right: 28px;
+      font-size: 0.9rem;
       font-weight: 900;
       letter-spacing: 6px;
       color: #ddd;
@@ -154,20 +139,20 @@
 
     .live-indicator {
       position: absolute;
-      top: 24px;
-      right: 32px;
+      top: 22px;
+      right: 28px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      font-weight: 700;
+      gap: 7px;
+      font-size: 0.75rem;
+      font-weight: 800;
       letter-spacing: 2px;
-      color: #bbb;
+      color: #ccc;
     }
 
     .live-dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: #ff4757;
       animation: pulse 2s infinite;
@@ -178,7 +163,6 @@
       50% { opacity: 0.3; transform: scale(0.7); }
     }
 
-    /* NO ADS */
     .no-ads-screen {
       height: 100vh;
       width: 100vw;
@@ -199,8 +183,9 @@
 
     .no-ads-screen .sub {
       font-size: 1rem;
-      color: #333355;
+      color: #2a2a4e;
       letter-spacing: 4px;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -223,28 +208,25 @@
   }
 
   function getDistanceKm(lat1, lng1, lat2, lng2) {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLng/2) * Math.sin(dLng/2);
+    var R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
+    var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+            Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
 
   async function fetchAds() {
     try {
-      const screenRes = await fetch(SUPABASE_URL + '/rest/v1/screens?name=eq.screen1', {
+      var screenRes = await fetch(SUPABASE_URL + '/rest/v1/screens?name=eq.screen1', {
         headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
       });
-      const screens = await screenRes.json();
-      const screen = screens[0];
+      var screens = await screenRes.json();
+      var screen = screens[0];
       if (!screen) { showNoAds(); return; }
 
-      const allAdsRes = await fetch(SUPABASE_URL + '/rest/v1/ads?status=eq.active&order=created_at.desc', {
+      var allAdsRes = await fetch(SUPABASE_URL + '/rest/v1/ads?status=eq.active&order=created_at.desc', {
         headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
       });
-      const allAds = await allAdsRes.json();
+      var allAds = await allAdsRes.json();
       ads = allAds.filter(function(ad) {
         if (!ad.lat || !ad.lng) return true;
         return getDistanceKm(screen.lat, screen.lng, ad.lat, ad.lng) <= ad.radius;
@@ -255,28 +237,25 @@
   }
 
   function showAd(i) {
-    const ad = ads[i];
-    const emoji = ad.type === 'dog' ? '🐶' : ad.type === 'cat' ? '🐱' : ad.type === 'human' ? '👤' : '❓';
-    const typeLabel = ad.type === 'human' ? 'Missing Person' : 'Missing ' + ad.type.charAt(0).toUpperCase() + ad.type.slice(1);
-    const photoHtml = ad.image_url
-      ? '<img src="' + ad.image_url + '" alt="photo" />'
+    var ad = ads[i];
+    var emoji = ad.type === 'dog' ? '🐶' : ad.type === 'cat' ? '🐱' : ad.type === 'human' ? '👤' : '❓';
+    var typeLabel = ad.type === 'human' ? 'Vermiste persoon' : ad.type === 'dog' ? 'Vermiste hond' : ad.type === 'cat' ? 'Vermiste kat' : 'Vermist dier';
+    var photoHtml = ad.image_url
+      ? '<img src="' + ad.image_url + '" alt="foto" />'
       : '<div class="photo-placeholder">' + emoji + '</div>';
 
     document.getElementById('root').innerHTML =
       '<div class="card">' +
-        '<div class="photo-side">' +
-          '<div class="missing-badge">MISSING</div>' +
-          '<div class="photo-frame">' + photoHtml + '</div>' +
-          '<div class="type-pill">' + typeLabel + '</div>' +
-        '</div>' +
+        '<div class="photo-side">' + photoHtml + '</div>' +
         '<div class="info-side">' +
           '<div class="live-indicator"><div class="live-dot"></div>LIVE</div>' +
+          '<div class="missing-badge">VERMIST</div>' +
+          '<div class="type-tag">' + typeLabel + '</div>' +
           '<div class="name">' + cap(ad.name, MAX_NAME) + '</div>' +
-          '<div class="description">' + cap(ad.description || 'No description provided.', MAX_DESC) + '</div>' +
-          '<div class="contact-block">' +
-            '<div class="contact-label">If found, please call</div>' +
-            '<div class="contact">' + cap(ad.contact, MAX_CONTACT) + '</div>' +
-          '</div>' +
+          '<div class="divider"></div>' +
+          '<div class="description">' + cap(ad.description || 'Geen beschrijving opgegeven.', MAX_DESC) + '</div>' +
+          '<div class="contact-label">Gezien? Bel direct</div>' +
+          '<div class="contact">' + cap(ad.contact, MAX_CONTACT) + '</div>' +
           '<div class="branding">MISSIGN</div>' +
         '</div>' +
       '</div>';
@@ -286,7 +265,7 @@
     document.getElementById('root').innerHTML =
       '<div class="no-ads-screen">' +
         '<div class="logo">MISSIGN</div>' +
-        '<div class="sub">NO ACTIVE ADS</div>' +
+        '<div class="sub">GEEN ACTIEVE ADVERTENTIES</div>' +
       '</div>';
   }
 
