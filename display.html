@@ -223,7 +223,8 @@
       var screen = screens[0];
       if (!screen) { showNoAds(); return; }
 
-      var allAdsRes = await fetch(SUPABASE_URL + '/rest/v1/ads?status=eq.active&order=created_at.desc', {
+      var now = new Date().toISOString();
+      var allAdsRes = await fetch(SUPABASE_URL + '/rest/v1/ads?status=eq.active&expires_at=gte.' + now + '&order=created_at.desc', {
         headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
       });
       var allAds = await allAdsRes.json();
