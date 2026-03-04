@@ -9,6 +9,10 @@ module.exports = async (req, res) => {
 
   try {
     adData.status = 'pending';
+    const days = adData.duration_days || 1;
+    const expires = new Date();
+    expires.setDate(expires.getDate() + days);
+    adData.expires_at = expires.toISOString();
     delete adData.screenCount;
 
     const body = JSON.stringify(adData);
