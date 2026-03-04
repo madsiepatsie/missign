@@ -8,17 +8,16 @@ module.exports = async (req, res) => {
   const { amount, adData, paymentMethod } = req.body;
 
   try {
-    // Save ad to Supabase first with pending status
     adData.status = 'pending';
     delete adData.screenCount;
 
     const body = JSON.stringify(adData);
-    const url = new URL(process.env.SUPABASE_URL + '/rest/v1/ads');
+    const hostname = 'oghquovomayveqmgdtgc.supabase.co';
 
     const adId = await new Promise((resolve, reject) => {
       const options = {
-        hostname: url.hostname,
-        path: url.pathname,
+        hostname: hostname,
+        path: '/rest/v1/ads',
         method: 'POST',
         headers: {
           'apikey': process.env.SUPABASE_SERVICE_KEY,
@@ -45,7 +44,6 @@ module.exports = async (req, res) => {
       req2.end();
     });
 
-    // Create Stripe session with just the ad ID
     const session = await stripe.checkout.sessions.create({
       payment_method_types: paymentMethod === 'ideal' ? ['ideal'] : ['card'],
       line_items: [{
