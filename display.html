@@ -216,7 +216,8 @@
 
   async function fetchAds() {
     try {
-      var screenRes = await fetch(SUPABASE_URL + '/rest/v1/screens?name=eq.screen1', {
+      var screenName = new URLSearchParams(window.location.search).get('screen') || 'screen1';
+      var screenRes = await fetch(SUPABASE_URL + '/rest/v1/screens?name=eq.' + screenName, {
         headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
       });
       var screens = await screenRes.json();
