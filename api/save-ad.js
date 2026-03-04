@@ -11,21 +11,19 @@ module.exports = async (req, res) => {
       return res.status(400).json({ success: false, error: 'Not paid' });
     }
 
-    const adData = JSON.parse(session.metadata.adData);
-
-    const body = JSON.stringify(adData);
-    const url = new URL(process.env.SUPABASE_URL + '/rest/v1/ads');
+    const adId = session.metadata.ad_id;
+    const body = JSON.stringify({ status: 'active' });
+    const url = new URL(process.env.SUPABASE_URL + '/rest/v1/ads?id=eq.' + adId);
 
     await new Promise((resolve, reject) => {
       const options = {
         hostname: url.hostname,
-        path: url.pathname,
-        method: 'POST',
+        path: url.pathname + url.search,
+        method: 'PATCH',
         headers: {
           'apikey': process.env.SUPABASE_SERVICE_KEY,
           'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
           'Content-Type': 'application/json',
-          'Prefer': 'return=minimal',
           'Content-Length': Buffer.byteLength(body)
         }
       };
@@ -33,10 +31,7 @@ module.exports = async (req, res) => {
       const req2 = https.request(options, (r) => {
         let data = '';
         r.on('data', chunk => data += chunk);
-        r.on('end', () => {
-          if (r.statusCode === 201 || r.statusCode === 200) resolve();
-          else reject(new Error('Supabase error: ' + data));
-        });
+        r.on('end', () => resolve(data));
       });
 
       req2.on('error', reject);
