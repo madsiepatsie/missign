@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
       }],
       mode: 'payment',
       success_url: 'https://missign-mfng.vercel.app/success.html?session_id={CHECKOUT_SESSION_ID}',
-      failure_url: 'https://missign-mfng.vercel.app',
+      cancel_url: 'https://missign-mfng.vercel.app',
       metadata: {
         adData: JSON.stringify(adData)
       }
