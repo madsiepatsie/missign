@@ -1,4 +1,5 @@
 const Stripe = require('stripe');
+const https = require('https');
 
 module.exports = async (req, res) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -12,23 +13,38 @@ module.exports = async (req, res) => {
 
     const adData = JSON.parse(session.metadata.adData);
 
-    const response = await fetch(process.env.SUPABASE_URL + '/rest/v1/ads', {
-      method: 'POST',
-      headers: {
-        'apikey': process.env.SUPABASE_SERVICE_KEY,
-        'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify(adData)
+    const body = JSON.stringify(adData);
+    const url = new URL(process.env.SUPABASE_URL + '/rest/v1/ads');
+
+    await new Promise((resolve, reject) => {
+      const options = {
+        hostname: url.hostname,
+        path: url.pathname,
+        method: 'POST',
+        headers: {
+          'apikey': process.env.SUPABASE_SERVICE_KEY,
+          'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal',
+          'Content-Length': Buffer.byteLength(body)
+        }
+      };
+
+      const req2 = https.request(options, (r) => {
+        let data = '';
+        r.on('data', chunk => data += chunk);
+        r.on('end', () => {
+          if (r.statusCode === 201 || r.statusCode === 200) resolve();
+          else reject(new Error('Supabase error: ' + data));
+        });
+      });
+
+      req2.on('error', reject);
+      req2.write(body);
+      req2.end();
     });
 
-    if (response.ok || response.status === 201) {
-      res.status(200).json({ success: true });
-    } else {
-      const t = await response.text();
-      res.status(500).json({ success: false, error: t });
-    }
+    res.status(200).json({ success: true });
   } catch(e) {
     res.status(500).json({ success: false, error: e.message });
   }
