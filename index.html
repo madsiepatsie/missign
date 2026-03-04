@@ -417,7 +417,7 @@
 
       <div class="form-group">
         <label>Jouw telefoonnummer <span class="hint">Wordt getoond op het scherm</span></label>
-        <input type="tel" id="contact" placeholder="bijv. 06 1234 5678" maxlength="20" oninput="updateChar('contact', 20)"/>
+        <input type="tel" id="contact" placeholder="bijv. 06 1234 5678" maxlength="20" oninput="this.value=this.value.replace(/[^0-9+\s]/g,''); updateChar('contact', 20)"/>
         <div class="char-row"><span class="char-count" id="contact-count">20 over</span></div>
       </div>
 
